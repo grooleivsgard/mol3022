@@ -1,0 +1,5 @@
+# Biopython: https://biopython.org/wiki/Documentation
+biopython==1.78
+
+# PyJaspar: https://pyjaspar.readthedocs.io/en/latest/intro.html
+pyjaspar==3.0.0 
