@@ -3,3 +3,6 @@ biopython==1.78
 
 # PyJaspar: https://pyjaspar.readthedocs.io/en/latest/intro.html
 pyjaspar==3.0.0 
+
+# Matplotlib: https://matplotlib.org/stable/contents.html
+matplotlib==3.4.3
