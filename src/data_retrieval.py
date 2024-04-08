@@ -1,54 +1,45 @@
 from pyjaspar import jaspardb
-from Bio import SeqIO
+from Bio import Entrez, SeqIO
 import numpy as np
+import re
+
+# Fetch a motif from JASPAR and convert it to a PWM
+def fetch_motif_pwm(motif, release='JASPAR2024'):
+    
+    print("Fetching motif...")
+    jdb_obj = jaspardb(release=release)
+    try:
+        # Assuming fetch_motif_by_id is a method that returns a motif object with a pwm attribute
+        pwm = jdb_obj.fetch_motif_by_id(motif).pwm
+        print("Successfully fetched motif!")
+    except AttributeError:
+        print(f"Motif ID {motif} not found.")
+        return None
+    return pwm
+    
+
+# Fetch a DNA sequence in FASTA format from NCBI
+def fetch_sequence(id, email):
+
+    Entrez.email = email # Always tell NCBI who is accessing the database
+
+    try:
+        with Entrez.efetch(db="nucleotide", id=id, rettype="fasta", retmode="text") as handle:
+            sequence_data = SeqIO.read(handle, "fasta")
+            dna_sequence = str(sequence_data.seq)
+            print("Successfully fetched dna sequence!")
+        
+        # Split the DNA sequence into separate sequences if there are any Ns
+        split_sequences = re.split('N+', dna_sequence)
+        split_sequences = [seq for seq in split_sequences if seq]
+
+        print(f"Split sequences: {split_sequences}") # For debugging
+
+        return split_sequences
+    
+    except Exception as e:
+        print(f"Error fetching sequence: {e}")
+        return None
 
 
-"""
-Get the motif PFM of a transcription factor from JASPAR and convert it to PWM.
-
-Transcription factors are proteins that help turn 
-specific genes on or off by binding to nearby DNA. 
-
-A Position Weight Matrix (PWM) is a tool used to 
-represent the binding preference of a transcription 
-factor to DNA. Essentially, it's a table that helps 
-predict where in the DNA this transcription factor might bind.
-
-E.g. get the Probability Frequency Matrix (PFM) for PDX1 (a transcriptional activator of several genes, incl insulin)
-"""
-
-class MotifAnalyzer:
-    def __init__(self, release='JASPAR2024'):
-        self.jdb_obj = jaspardb(release=release)
-
-    def get_motif_pwm(self, motif):
-        # check if motif is the motif name or the motif ID
-        if motif.startswith('MA'):
-            pwm = self.jdb_obj.fetch_motif_by_id(motif).pwm
-            print(pwm)  # For debugging
-            return pwm
-        else:
-            pwm = self.jdb_obj.fetch_motifs_by_name(motif).pwm  # doesn't work
-            print(pwm)
-            return pwm
-
-"""
-Idenitfy a DNA sequence that is a target gene of the transcription factor.
-These regions are often found in the promoter regions of genes 
-(the part of the gene located at the start of the gene, controlling its transcription).
-
-Then, import a FASTA file of a DNA sequence to convert it to a list of sequences.
-
-TODO: Implement access to NCBIs Entrez databases (https://biopython.org/DIST/docs/tutorial/Tutorial.html#sec197, ch. 10)
-"""
-class SequenceParser:
-    def __init__(self, file_path):
-        self.file_path = file_path
-
-    def read_fasta(self):
-        # Reads a FASTA file and returns a list of sequences.
-        sequences = []
-        for record in SeqIO.parse(self.file_path, "fasta"):
-            sequences.append(str(record.seq).upper())
-        return sequences
 
