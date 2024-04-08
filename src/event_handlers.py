@@ -3,29 +3,52 @@ from data_retrieval import fetch_motif_pwm, fetch_sequence
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import itertools
+import re
 
 
-# NOT FINISHED
+# Function to validate the inpu
 def validate(entries):
-    # Function to validate the input
-    valid = True
+    errors = {}
 
-    for field, entry in entries:
+    for field, entry, _ in entries:
         text = entry.get().strip()  # Remove leading/trailing whitespaces
-        if not text:  # Basic check for non-empty
-            print(f"Error: {field} is required.")
-            valid = False
-            continue  # Add more specific checks as needed
         
-        # Example: specific field validation
+        # Basic check for non-empty fields
+        if not text:  
+            errors[field] = "This field is required."
+        
+        # Transcription Factor - Matrix ID validation - either 'MA' or 'UN' followed by a number and a dot and another number
+        if field == 'Transcription Factor - Matrix ID' and not re.match(r'^(MA|UN)\d+\.\d$', text):
+            errors[field] = "Must start with 'MA' or 'UN', followed by a version number (e.g. MA1636.1)."
+        
+        # Genome Sequence Accession 
+        if field == 'Genome Sequence - GenBank Accession Number' and not re.match(r"^[A-Za-z]{1,2}\d{5,}+\.\d$", text):
+            errors[field] = "Must start with one or two letters followed by at least five digits (e.g. M57671.1)."
+
+        # E-mail validation
         if field == 'Email' and '@' not in text:
-            print(f"Error: {field} doesn't seem to be a valid email.")
-            valid = False
-    return valid
+            errors[field] = "This doesn't seem to be a valid email."
+    
+    return errors
 
 
 def handle_submit(entries, output_pwm, root):
-    
+    field_errors = validate(entries)
+
+    # Reset the error labels for all fields
+    for _, _, error_label in entries:
+        error_label.config(text='')
+
+    # Check if there are any errors and display them
+    if field_errors:
+        for field, entry, error_label in entries:
+            if field in field_errors:
+                error_label.config(text=field_errors[field], foreground='red')
+        return # Stop the function since there are errors
+
+    for _, _, error_label in entries:
+        error_label.config(text='')
+     
     # Function to handle the submit button click
     pwm_id, ncbi_id, email = [entry[1].get().strip() for entry in entries]
 
@@ -72,4 +95,4 @@ def plot_scores(scores, binding_site, root):
 
 
 def exit_program(root):
-    root.destroy()  # Avslutter GUI-vinduet og dermed programmet
+    root.destroy()  # Ends the GUI window / the program
