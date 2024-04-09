@@ -34,7 +34,12 @@ def makeform(root, fields):
 
         entries.append((field, ent, error_label))
     return entries
-    
+
+def clear_entries(entries):
+    for entry in entries:
+        entry[1].delete(0, tk.END)  # Delete text from entry widget
+        entry[2].config(text="")    # Clear error message, if any
+
 if __name__ == "__main__":
     # Create the main window
     root = tk.Tk()
@@ -57,12 +62,22 @@ if __name__ == "__main__":
     output_pwm = ttk.Label(root, text="")
     output_pwm.pack()
 
+    output_score = ttk.Label(root, text="")
+    output_score.pack()
+
     # Add a submit button
-    b1 = ttk.Button(root, text="Submit", command=lambda: handle_submit(ents, output_pwm, root))
+    b1 = ttk.Button(root, text="Submit", command=lambda: handle_submit(ents, output_pwm, output_score, root))
     b1.pack(side=tk.LEFT, padx=5, pady=5)
     
     # Add a quit button
     b2 = ttk.Button(root, text="Quit", command=lambda: exit_program(root))
     b2.pack(side=tk.LEFT, padx=5, pady=5)
 
+    # Add a clear button
+    b3 = ttk.Button(root, text="Clear", command=lambda: clear_entries(ents))
+    b3.pack(side=tk.LEFT, padx=5, pady=5)
+
     root.mainloop()
+
+
+
