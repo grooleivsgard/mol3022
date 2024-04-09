@@ -1,8 +1,3 @@
-import matplotlib.pyplot as plt
-import re
-import itertools
-
-
 """
 Use the PWM of the TF to scan through the DNA sequence. The purpose is to look for
 sections of the DNA that match the pattern in the PWM because these are places
