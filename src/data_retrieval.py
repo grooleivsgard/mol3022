@@ -1,6 +1,5 @@
 from pyjaspar import jaspardb
 from Bio import Entrez, SeqIO
-import numpy as np
 import re
 
 # Fetch a motif from JASPAR and convert it to a PWM
