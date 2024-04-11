@@ -9,12 +9,12 @@ Transcription factors play a role in regulating gene expression, and understandi
 - User-friendly interface for inputting DNA sequences and viewing results.
 - Potential to explore gene regulation mechanisms associated with diseases like diabetes.
 
-# Dependencies
+## Dependencies
 - pip install biopython
 - pip install pyjaspar
 - pip install matplotlib
 
-# How to Run
+## How to Run
 
 To run the program, execute the following command in your terminal:
 
