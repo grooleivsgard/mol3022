@@ -10,9 +10,9 @@ Transcription factors play a role in regulating gene expression, and understandi
 - Potential to explore gene regulation mechanisms associated with diseases like diabetes.
 
 # Dependencies
-pip install biopython
-pip install pyjaspar
-pip install matplotlib
+- pip install biopython
+- pip install pyjaspar
+- pip install matplotlib
 
 # How to Run
 
