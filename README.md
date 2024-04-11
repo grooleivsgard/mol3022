@@ -5,7 +5,7 @@ Transcription factors play a role in regulating gene expression, and understandi
 
 ## Features
 - Identification of transcription factor binding sites using PWM (Position Weight Matrix) scores.
-- Utilization of data from Jaspar database for transcription factor binding motifs.
+- Utilization of data from JASPAR database for transcription factor binding motifs and GenBank database from NCBI for genome sequences.
 - User-friendly interface for inputting DNA sequences and viewing results.
 - Potential to explore gene regulation mechanisms associated with diseases like diabetes.
 
