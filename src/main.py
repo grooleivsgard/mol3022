@@ -5,13 +5,6 @@ from event_handlers import handle_submit, exit_program
 # Fields for the form
 fields = ('Transcription Factor - Matrix ID', 'Genome Sequence - GenBank Accession Number', 'Email')
 
-# Function to fetch the values from the form
-def fetch(entries):
-    for entry in entries:
-        field = entry[0]
-        text  = entry[1].get()
-        print('%s: "%s"' % (field, text))
-
 # Function to create the form
 def makeform(root, fields):
     entries = []
