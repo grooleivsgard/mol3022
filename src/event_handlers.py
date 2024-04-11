@@ -80,7 +80,7 @@ def plot_scores(scores, binding_site, root):
     max_score = 0
     max_index = 0
     for i, score in enumerate(scores):
-        ax.plot(score, label=f'score {i + 1}', color=next(colors))
+        ax.plot(score, label=f'sequence {i + 1}', color=next(colors))
         if (max_score < max(score)):
             max_score_index = max(range(len(scores[i])), key=lambda x: scores[i][x])
             max_index = i
