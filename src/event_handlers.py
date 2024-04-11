@@ -19,12 +19,12 @@ def validate(entries):
             errors[field] = "This field is required."
         
         # Transcription Factor - Matrix ID validation - either 'MA' or 'UN' followed by a number and a dot and another number
-        if field == 'Transcription Factor - Matrix ID' and not re.match(r'^(MA|UN)\d\.\d$', text):
+        if field == 'Transcription Factor - Matrix ID' and not re.match(r'^(MA|UN)\d+\.\d$', text):
             errors[field] = "Must start with 'MA' or 'UN', followed by a version number (e.g. MA1636.1)."
         
         # Genome Sequence Accession 
-        if field == 'Genome Sequence - GenBank Accession Number' and not re.match(r"^[A-Za-z]{1,2}\d{5,}\.\d$", text):
-            errors[field] = "Must start with one or two letters followed by at least five digits (e.g. M57671.1)."
+        if field == 'Genome Sequence - GenBank Accession Number' and not re.match(r"^[A-Za-z]{1,2}.+$", text):
+            errors[field] = "Must start with one or two letters followed by a version number (e.g. M57671.1 or NG_007114.1)."
 
         # E-mail validation
         if field == 'Email' and '@' not in text:
