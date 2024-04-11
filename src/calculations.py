@@ -7,28 +7,28 @@ where the TF is likely to bind.
 # Scan a DNA sequence for potential binding sites using a PWM.
 def scan_sequence(pwm, sequences):
     all_scores = []
+    binding_sites = []
+    max_score = 0
 
     # Calculate scores for the entire DNA sequence
-    for i, sequence in enumerate(sequences):
-        score = calculate_pwm_score(pwm, sequence)  
-        all_scores.append((score))
+    for sequence in sequences:
+        score = calculate_pwm_score(pwm, sequence)
+        all_scores.append(score)
 
-    max_score = 0
-    binding_sites = []
-    index = 0
+    # Find max_score and corresponding index
+    for j, score_list in enumerate(all_scores):
+        for k in range(len(score_list) - len(pwm['A']) + 1):
+            if score_list[k] > max_score:
+                max_score = score_list[k]
+                max_index = k
+                max_seq = j
 
-    # Finds the number of columns in the PWM table
-    for i in range(len(sequence)-len(pwm['A'])+1): 
-        if score[i] > max_score:
-            max_score = score[i]
-            index = i
+    # Find binding sites
+    for i in range(len(pwm['A'])):
+        binding_sites.append(sequences[max_seq][max_index + i])
 
-    # Finds the binding sites
-    for j in range(len(pwm['A'])):
-        binding_sites.append(sequence[index+j])
-    print(max_score)
+    return all_scores, binding_sites, max_score
 
-    return all_scores, binding_sites
 
 # Calculate the score for a sequence against a given PWM.
 def calculate_pwm_score(PWM, sequence):
